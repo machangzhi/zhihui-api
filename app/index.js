@@ -2,6 +2,7 @@
 const Koa = require("koa")
 const bodyparser = require("koa-bodyparser")
 const error = require("koa-json-error")
+const parameter = require("koa-parameter")
 // 实例化koa
 const app = new Koa()
 // 引入自动注册路由函数
@@ -27,6 +28,7 @@ app.use(
   })
 )
 app.use(bodyparser())
+app.use(parameter(app))
 // 自动化注册路由
 routing(app)
 
