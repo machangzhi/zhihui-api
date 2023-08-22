@@ -2,9 +2,9 @@
 const Router = require("koa-router")
 // 实例化路由
 const router = new Router()
+// 引入控制器
+const { index } = require("../controllers/home")
 
-router.get("/", (ctx) => {
-  ctx.body = "主页"
-})
+router.get("/", index)
 
 module.exports = router
