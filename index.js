@@ -5,6 +5,8 @@ const Router = require("koa-router")
 const app = new Koa()
 // 实例化路由
 const router = new Router()
+// 实例化user路由
+const usersRouter = new Router({ prefix: "/users" })
 // 定义端口
 const port = 3000
 
@@ -12,18 +14,19 @@ router.get("/", (ctx) => {
   ctx.body = "主页"
 })
 
-router.get("/users", (ctx) => {
+usersRouter.get("/", (ctx) => {
   ctx.body = "用户列表"
 })
 
-router.post("/users", (ctx) => {
+usersRouter.post("/", (ctx) => {
   ctx.body = "创建用户"
 })
 
-router.get("/users/:id", (ctx) => {
+usersRouter.get("/:id", (ctx) => {
   ctx.body = "用户" + ctx.params.id
 })
 
 app.use(router.routes())
+app.use(usersRouter.routes())
 
 app.listen(port)
