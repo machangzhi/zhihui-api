@@ -1,5 +1,6 @@
 // 引用各类依赖
 const Koa = require("koa")
+const bodyparser = require("koa-bodyparser")
 const Router = require("koa-router")
 // 实例化koa
 const app = new Koa()
@@ -34,6 +35,7 @@ usersRouter.delete("/:id", (ctx) => {
   ctx.status = 204
 })
 
+app.use(bodyparser())
 app.use(router.routes())
 app.use(usersRouter.routes())
 app.use(usersRouter.allowedMethods())
