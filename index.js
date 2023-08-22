@@ -10,28 +10,33 @@ const router = new Router()
 const usersRouter = new Router({ prefix: "/users" })
 // 定义端口
 const port = 3000
+// 定义内存数据库
+const db = [{ name: "李雷" }]
 
 router.get("/", (ctx) => {
   ctx.body = "主页"
 })
 
 usersRouter.get("/", (ctx) => {
-  ctx.body = [{ name: "a" }, { name: "b" }]
+  ctx.body = db
 })
 
 usersRouter.post("/", (ctx) => {
-  ctx.body = { name: "c" }
+  db.push(ctx.request.body)
+  ctx.body = ctx.request.body
 })
 
 usersRouter.get("/:id", (ctx) => {
-  ctx.body = { name: "c" }
+  ctx.body = db[ctx.params.id * 1]
 })
 
 usersRouter.put("/:id", (ctx) => {
-  ctx.body = { name: "c1" }
+  db[ctx.params.id * 1] = ctx.request.body
+  ctx.body = ctx.request.body
 })
 
 usersRouter.delete("/:id", (ctx) => {
+  db.splice(ctx.params.id * 1, 1)
   ctx.status = 204
 })
 
