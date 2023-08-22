@@ -28,5 +28,6 @@ usersRouter.get("/:id", (ctx) => {
 
 app.use(router.routes())
 app.use(usersRouter.routes())
+app.use(usersRouter.allowedMethods())
 
 app.listen(port)
