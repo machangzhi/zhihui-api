@@ -3,6 +3,9 @@ const Koa = require("koa")
 const bodyparser = require("koa-bodyparser")
 const error = require("koa-json-error")
 const parameter = require("koa-parameter")
+const mongoose = require("mongoose")
+mongoose.set("strictQuery", true)
+const { connectionStr } = require("./config")
 // 实例化koa
 const app = new Koa()
 // 引入自动注册路由函数
@@ -20,6 +23,11 @@ const port = 3000
 //     }
 //   }
 // })
+
+mongoose.connect(connectionStr, { useNewUrlParser: true }, () => {
+  console.log("MongoDB 连接成功")
+})
+mongoose.connection.on("error", console.error)
 
 app.use(
   error({
