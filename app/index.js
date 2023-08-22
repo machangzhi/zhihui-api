@@ -8,6 +8,17 @@ const routing = require("./routes")
 // 定义端口
 const port = 3000
 
+app.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (error) {
+    ctx.status = error.status || error.statusCode || 500
+    ctx.body = {
+      message: error.message,
+    }
+  }
+})
+
 app.use(bodyparser())
 // 自动化注册路由
 routing(app)
