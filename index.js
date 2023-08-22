@@ -15,15 +15,23 @@ router.get("/", (ctx) => {
 })
 
 usersRouter.get("/", (ctx) => {
-  ctx.body = "用户列表"
+  ctx.body = [{ name: "a" }, { name: "b" }]
 })
 
 usersRouter.post("/", (ctx) => {
-  ctx.body = "创建用户"
+  ctx.body = { name: "c" }
 })
 
 usersRouter.get("/:id", (ctx) => {
-  ctx.body = "用户" + ctx.params.id
+  ctx.body = { name: "c" }
+})
+
+usersRouter.put("/:id", (ctx) => {
+  ctx.body = { name: "c1" }
+})
+
+usersRouter.delete("/:id", (ctx) => {
+  ctx.status = 204
 })
 
 app.use(router.routes())
