@@ -1,6 +1,7 @@
 // 引用各类依赖
 const Router = require("koa-router")
-const JWT = require("jsonwebtoken")
+// const JWT = require("jsonwebtoken")
+const JWT = require("koa-jwt")
 const { secret } = require("../config")
 // 实例化路由
 const router = new Router({ prefix: "/users" })
@@ -15,17 +16,18 @@ const {
   checkOwner,
 } = require("../controllers/users")
 
-const auth = async (ctx, next) => {
-  const { authorization = "" } = ctx.request.header
-  const token = authorization.replace("Bearer ", "")
-  try {
-    const user = JWT.verify(token, secret)
-    ctx.state.user = user
-  } catch (err) {
-    ctx.throw(401, err.message)
-  }
-  await next()
-}
+// const auth = async (ctx, next) => {
+//   const { authorization = "" } = ctx.request.header
+//   const token = authorization.replace("Bearer ", "")
+//   try {
+//     const user = JWT.verify(token, secret)
+//     ctx.state.user = user
+//   } catch (err) {
+//     ctx.throw(401, err.message)
+//   }
+//   await next()
+// }
+const auth = JWT({ secret })
 
 router.get("/", find)
 
