@@ -21,6 +21,11 @@ class UsersCtl {
         require: true,
       },
     })
+    const { name } = ctx.request.body
+    const repeatedUser = await User.findOne({ name })
+    if (repeatedUser) {
+      ctx.throw(409, "用户名存在")
+    }
     const user = await new User(ctx.request.body).save()
     ctx.body = user
   }
