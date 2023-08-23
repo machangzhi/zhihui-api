@@ -16,6 +16,10 @@ class UsersCtl {
         type: "string",
         require: true,
       },
+      password: {
+        type: "string",
+        require: true,
+      },
     })
     const user = await new User(ctx.request.body).save()
     ctx.body = user
@@ -24,7 +28,11 @@ class UsersCtl {
     ctx.verifyParams({
       name: {
         type: "string",
-        require: true,
+        require: false,
+      },
+      password: {
+        type: "string",
+        require: false,
       },
     })
     const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body)
