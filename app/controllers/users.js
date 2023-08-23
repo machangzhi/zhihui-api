@@ -18,11 +18,11 @@ class UsersCtl {
     ctx.verifyParams({
       name: {
         type: "string",
-        require: true,
+        required: true,
       },
       password: {
         type: "string",
-        require: true,
+        required: true,
       },
     })
     const { name } = ctx.request.body
@@ -36,14 +36,8 @@ class UsersCtl {
 
   async update(ctx) {
     ctx.verifyParams({
-      name: {
-        type: "string",
-        require: false,
-      },
-      password: {
-        type: "string",
-        require: false,
-      },
+      name: { type: "string", required: false },
+      password: { type: "string", required: false },
     })
     const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body)
     if (!user) {
@@ -76,7 +70,7 @@ class UsersCtl {
       ctx.throw(401, "用户名或密码不正确")
     }
     const { _id, name } = user
-    const token = JWT.sign({ _id, name }, secret, { expiresIn: "1d" })
+    const token = JWT.sign({ _id, name }, secret, { expiresIn: "1h" })
     ctx.body = { token }
   }
 }
