@@ -1,32 +1,43 @@
-// 定义内存数据库
-const db = [{ name: "李雷" }]
+const User = require("../models/users")
 class UsersCtl {
-  find(ctx) {
-    ctx.body = db
+  async find(ctx) {
+    ctx.body = await User.find()
   }
-  findById(ctx) {
-    ctx.body = db[ctx.params.id * 1]
+  async findById(ctx) {
+    const user = await User.findById(ctx.params.id)
+    if (!user) {
+      ctx.throw("404", "用户不存在")
+    }
+    ctx.body = user
   }
-  create(ctx) {
+  async create(ctx) {
     ctx.verifyParams({
       name: {
         type: "string",
-        require: false,
-      },
-      age: {
-        type: "number",
-        required: false,
+        require: true,
       },
     })
-    db.push(ctx.request.body)
-    ctx.body = ctx.request.body
+    const user = await new User(ctx.request.body).save()
+    ctx.body = user
   }
-  update(ctx) {
-    db[ctx.params.id * 1] = ctx.request.body
-    ctx.body = ctx.request.body
+  async update(ctx) {
+    ctx.verifyParams({
+      name: {
+        type: "string",
+        require: true,
+      },
+    })
+    const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body)
+    if (!user) {
+      ctx.throw(404, "用户不存在")
+    }
+    ctx.body = user
   }
-  delete(ctx) {
-    db.splice(ctx.params.id * 1, 1)
+  async delete(ctx) {
+    const user = await User.findByIdAndRemove(ctx.params.id)
+    if (!user) {
+      ctx.throw(404, "用户不存在")
+    }
     ctx.status = 204
   }
 }
