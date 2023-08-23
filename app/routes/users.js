@@ -12,6 +12,7 @@ const {
   update,
   delete: del,
   login,
+  checkOwner,
 } = require("../controllers/users")
 
 const auth = async (ctx, next) => {
@@ -32,9 +33,9 @@ router.post("/", create)
 
 router.get("/:id", findById)
 
-router.patch("/:id", auth, update)
+router.patch("/:id", auth, checkOwner, update)
 
-router.delete("/:id", auth, del)
+router.delete("/:id", auth, checkOwner, del)
 
 router.post("/login", login)
 
