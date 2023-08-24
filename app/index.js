@@ -1,11 +1,12 @@
 // 引用各类依赖
 const Koa = require("koa")
-const bodyparser = require("koa-bodyparser")
+const { koaBody } = require("koa-body")
 const error = require("koa-json-error")
 const parameter = require("koa-parameter")
 const mongoose = require("mongoose")
 mongoose.set("strictQuery", true)
 const { connectionStr } = require("./config")
+const path = require("path")
 // 实例化koa
 const app = new Koa()
 // 引入自动注册路由函数
@@ -35,7 +36,15 @@ app.use(
       process.env.NODE_ENV === "production" ? rest : { stack, ...rest },
   })
 )
-app.use(bodyparser())
+app.use(
+  koaBody({
+    multipart: true,
+    formidable: {
+      uploadDir: path.join(__dirname, "/public/uploads"),
+      keepExtensions: true,
+    },
+  })
+)
 app.use(parameter(app))
 // 自动化注册路由
 routing(app)
