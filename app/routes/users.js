@@ -14,6 +14,8 @@ const {
   delete: del,
   login,
   checkOwner,
+  listFollowing,
+  follow,
 } = require("../controllers/users")
 
 // const auth = async (ctx, next) => {
@@ -40,5 +42,9 @@ router.patch("/:id", auth, checkOwner, update)
 router.delete("/:id", auth, checkOwner, del)
 
 router.post("/login", login)
+
+router.get("/:id/following", listFollowing)
+
+router.put("/following/:id", auth, follow)
 
 module.exports = router
