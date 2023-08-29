@@ -112,6 +112,16 @@ class UsersCtl {
     }
     ctx.status = 204
   }
+
+  async unfollow(ctx) {
+    const me = await User.findById(ctx.state.user._id).select("+following")
+    const index = me.following.map((id) => id.toString()).indexOf(ctx.params.id)
+    if (index > -1) {
+      me.following.splice(index, 1)
+      me.save()
+    }
+    ctx.status = 204
+  }
 }
 
 module.exports = new UsersCtl()

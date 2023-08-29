@@ -16,6 +16,7 @@ const {
   checkOwner,
   listFollowing,
   follow,
+  unfollow,
 } = require("../controllers/users")
 
 // const auth = async (ctx, next) => {
@@ -46,5 +47,7 @@ router.post("/login", login)
 router.get("/:id/following", listFollowing)
 
 router.put("/following/:id", auth, follow)
+
+router.put("/unfollowing/:id", auth, unfollow)
 
 module.exports = router
