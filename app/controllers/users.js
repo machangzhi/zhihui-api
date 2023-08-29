@@ -104,6 +104,14 @@ class UsersCtl {
     ctx.body = user.following
   }
 
+  async listFollowers(ctx) {
+    const user = await User.find({ following: ctx.params.id })
+    if (!user) {
+      ctx.throw(404)
+    }
+    ctx.body = user
+  }
+
   async follow(ctx) {
     const me = await User.findById(ctx.state.user._id).select("+following")
     if (!me.following.map((id) => id.toString()).includes(ctx.params.id)) {
