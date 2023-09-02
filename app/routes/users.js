@@ -1,57 +1,47 @@
-// 引用各类依赖
-const Router = require("koa-router")
-// const JWT = require("jsonwebtoken")
-const JWT = require("koa-jwt")
-const { secret } = require("../config")
-// 实例化路由
-const router = new Router({ prefix: "/users" })
-// 引入控制器
+const jwt = require('koa-jwt');
+const Router = require('koa-router');
+const router = new Router({ prefix: '/users' });
 const {
-  find,
-  findById,
-  create,
-  update,
-  delete: del,
-  login,
-  checkOwner,
-  listFollowing,
-  listFollowers,
-  follow,
-  unfollow,
-  checkUserExist,
-} = require("../controllers/users")
+  find, findById, create, update,
+  delete: del, login, checkOwner,
+  listFollowing, listFollowers,
+  checkUserExist, follow, unfollow,
+  listFollowingTopics, followTopic, unfollowTopic,
+  listQuestions,
+  listLikingAnswers, likeAnswer, unlikeAnswer,
+  listDislikingAnswers, dislikeAnswer, undislikeAnswer,
+  listCollectingAnswers, collectAnswer, uncollectAnswer,
+} = require('../controllers/users');
 
-// const auth = async (ctx, next) => {
-//   const { authorization = "" } = ctx.request.header
-//   const token = authorization.replace("Bearer ", "")
-//   try {
-//     const user = JWT.verify(token, secret)
-//     ctx.state.user = user
-//   } catch (err) {
-//     ctx.throw(401, err.message)
-//   }
-//   await next()
-// }
-const auth = JWT({ secret })
+const { checkTopicExist } = require('../controllers/topics');
+const { checkAnswerExist } = require('../controllers/answers');
 
-router.get("/", find)
+const { secret } = require('../config');
 
-router.post("/", create)
+const auth = jwt({ secret });
 
-router.get("/:id", findById)
+router.get('/', find);
+router.post('/', create);
+router.get('/:id', findById);
+router.patch('/:id', auth, checkOwner, update);
+router.delete('/:id', auth, checkOwner, del);
+router.post('/login', login);
+router.get('/:id/following', listFollowing);
+router.get('/:id/followers', listFollowers);
+router.put('/following/:id', auth, checkUserExist, follow);
+router.delete('/following/:id', auth, checkUserExist, unfollow);
+router.get('/:id/followingTopics', listFollowingTopics);
+router.put('/followingTopics/:id', auth, checkTopicExist, followTopic);
+router.delete('/followingTopics/:id', auth, checkTopicExist, unfollowTopic);
+router.get('/:id/questions', listQuestions);
+router.get('/:id/likingAnswers', listLikingAnswers);
+router.put('/likingAnswers/:id', auth, checkAnswerExist, likeAnswer, undislikeAnswer);
+router.delete('/likingAnswers/:id', auth, checkAnswerExist, unlikeAnswer);
+router.get('/:id/dislikingAnswers', listDislikingAnswers);
+router.put('/dislikingAnswers/:id', auth, checkAnswerExist, dislikeAnswer, unlikeAnswer);
+router.delete('/dislikingAnswers/:id', auth, checkAnswerExist, undislikeAnswer);
+router.get('/:id/collectingAnswers', listCollectingAnswers);
+router.put('/collectingAnswers/:id', auth, checkAnswerExist, collectAnswer);
+router.delete('/collectingAnswers/:id', auth, checkAnswerExist, uncollectAnswer);
 
-router.patch("/:id", auth, checkOwner, update)
-
-router.delete("/:id", auth, checkOwner, del)
-
-router.post("/login", login)
-
-router.get("/:id/following", listFollowing)
-
-router.get("/:id/followers", listFollowers)
-
-router.put("/following/:id", auth, checkUserExist, follow)
-
-router.delete("/following/:id", auth, checkUserExist, unfollow)
-
-module.exports = router
+module.exports = router;
